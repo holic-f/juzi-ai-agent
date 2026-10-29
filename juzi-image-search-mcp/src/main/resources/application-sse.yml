@@ -1,0 +1,10 @@
+spring:
+  ai:
+    mcp:
+      server:
+        name: juzi-image-search-mcp
+        version: 0.0.1
+        type: SYNC
+        # sse
+        stdio: false
+        protocol: SSE

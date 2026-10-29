@@ -1,0 +1,81 @@
+spring:
+  application:
+    name: juzi-ai-agent
+  profiles:
+    active: local
+server:
+  port: 8123
+  # 4000 个中文/emoji 经 GET URL 编码后也能进入应用层长度校验。
+  max-http-request-header-size: 64KB
+  servlet:
+    context-path: /api
+  datasource:
+    url: jdbc:postgresql://公网地址/yu_ai_agent
+    username: 用户名
+    password: 密码
+  ai:
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        dimensions: 1024
+        distance-type: COSINE_DISTANCE
+        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+  mcp:
+    client:
+      stdio:
+        servers-configuration: classpath:mcp-servers.json
+
+
+# springdoc-openapi
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.yupi.juziaiagent.controller
+# knife4j
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+# Manus 性能参数；不设置 MANUS_MODEL 时沿用当前模型，不影响恋爱助手。
+app:
+  model-limits:
+    max-input-chars: ${MODEL_MAX_INPUT_CHARS:4000}
+    max-output-tokens: ${MODEL_MAX_OUTPUT_TOKENS:2048}
+    # auto 沿用已配置字段；不同 Manus 模型可独立指定 max-completion-tokens。
+    output-token-parameter: ${MODEL_OUTPUT_TOKEN_PARAMETER:auto}
+    manus-output-token-parameter: ${MODEL_MANUS_OUTPUT_TOKEN_PARAMETER:auto}
+    max-concurrent-tasks: ${MODEL_MAX_CONCURRENT_TASKS:2}
+    max-tasks-per-minute: ${MODEL_MAX_TASKS_PER_MINUTE:20}
+    chat-timeout: ${MODEL_CHAT_TIMEOUT:2m}
+    manus-timeout: ${MODEL_MANUS_TIMEOUT:5m}
+    manus-max-steps: ${MODEL_MANUS_MAX_STEPS:20}
+  chat-logging:
+    include-content: ${CHAT_LOG_INCLUDE_CONTENT:false}
+  chat-memory:
+    max-stored-messages: ${CHAT_MEMORY_MAX_STORED_MESSAGES:200}
+    max-context-messages: ${CHAT_MEMORY_MAX_CONTEXT_MESSAGES:20}
+  agent:
+    model: ${MANUS_MODEL:}
+    max-tool-result-chars: ${MANUS_MAX_TOOL_RESULT_CHARS:6000}
+
+# searchApi
+search-api:
+  api-key: API Key
+
+---
+# 前后端同机使用时，仅允许本机连接；prod 配置不激活此段。
+spring:
+  config:
+    activate:
+      on-profile: local
+server:
+  address: 127.0.0.1
+

@@ -1,0 +1,18 @@
+# 与 local 一起启用：local,mcp-image。先以 sse profile 启动图片搜索服务。
+spring:
+  ai:
+    mcp:
+      client:
+        enabled: true
+        type: SYNC
+        request-timeout: 20s
+        toolcallback:
+          enabled: true
+        stdio:
+          # 此配置使用独立运行的 HTTP 服务，不读取旧的 stdio 子进程配置。
+          servers-configuration: ""
+        sse:
+          connections:
+            juzi-image-search:
+              url: ${IMAGE_SEARCH_MCP_URL:http://127.0.0.1:8127}
+              sse-endpoint: /sse

@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: juzi-ai-agent
+  datasource:
+    url: jdbc:postgresql://改为你的公网地址/yu_ai_agent
+    username: 改为你的用户名
+    password: 改为你的密码
+  ai:
+    # 生产同样走 OpenAI 兼容网关，关闭 DashScope 原生模型自动配置（与 application-local.yml 保持一致），
+    # 否则缺少 spring.ai.dashscope.api-key 时启动会直接失败。若生产要用 DashScope 原生模型，改为 true 并配置密钥。
+    dashscope:
+      enabled: false
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        dimensions: 1024
+        distance-type: COSINE_DISTANCE
+        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+  mcp:
+    client:
+      stdio:
+        servers-configuration: classpath:mcp-servers.json
+
+server:
+  port: 8123
+  servlet:
+    context-path: /api
+
+# springdoc-openapi
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.yupi.juziaiagent.controller
+# knife4j
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+# Manus 性能参数；不设置 MANUS_MODEL 时沿用当前模型，不影响恋爱助手。
+app:
+  agent:
+    model: ${MANUS_MODEL:}
+    max-tool-result-chars: ${MANUS_MAX_TOOL_RESULT_CHARS:6000}
+
+# searchApi
+search-api:
+  api-key: 你的 API Key

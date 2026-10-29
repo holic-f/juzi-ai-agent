@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: juzi-image-search-mcp
+  profiles:
+    active: stdio
+server:
+  port: 8127
+
+# 配置 Pixabay Key 后，图片搜索工具会优先使用 Pixabay。
+pixabay:
+  api-key: ${PIXABAY_API_KEY:}

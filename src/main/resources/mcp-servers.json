@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "amap-maps": {
+      "command": "npx.cmd",
+      "args": [
+        "-y",
+        "@amap/amap-maps-mcp-server"
+      ],
+      "env": {
+        "AMAP_MAPS_API_KEY": "API Key"
+      }
+    },
+    "juzi-image-search-mcp": {
+      "command": "java",
+      "args": [
+        "-Dspring.ai.mcp.server.stdio=true",
+        "-Dspring.main.web-application-type=none",
+        "-Dlogging.pattern.console=",
+        "-jar",
+        "juzi-image-search-mcp-0.0.1-SNAPSHOT.jar"
+      ],
+      "env": {
+        "PIXABAY_API_KEY": "API Key",
+        "SEARCHAPI_API_KEY": "SearchAPI Key"
+      }
+    }
+  }
+}

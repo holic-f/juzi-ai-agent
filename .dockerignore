@@ -1,0 +1,18 @@
+# 构建上下文只需要 pom.xml 和 src，以下内容不进上下文，避免上传过慢、镜像过大
+.git
+.gitignore
+.gitattributes
+.idea
+*.iml
+target
+**/target
+juzi-ai-agent-frontend
+juzi-image-search-mcp
+tmp
+docs
+*.md
+Dockerfile
+.dockerignore
+
+# 本地密钥文件，绝不进镜像；prod 的密钥请用环境变量或挂载 /app/config/application-prod.yml 注入
+src/main/resources/application-local.yml

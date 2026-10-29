@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  仅用于 Docker 构建阶段（COPY 到镜像内 /root/.m2/settings.xml）。
+  原因：容器内直连 Maven Central 时经常被 TLS 干扰，报
+  "Remote host terminated the handshake / SSL peer shut down incorrectly"；
+  统一走阿里云公共仓库，与本地 ~/.m2/settings.xml 保持一致。
+  如果在海外/网络良好的环境构建，删除 Dockerfile 里 COPY 这一行即可恢复直连 Central。
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <mirrors>
+    <mirror>
+      <id>aliyunmaven</id>
+      <mirrorOf>central</mirrorOf>
+      <name>Aliyun Public Repository</name>
+      <url>https://maven.aliyun.com/repository/public</url>
+    </mirror>
+  </mirrors>
+</settings>
